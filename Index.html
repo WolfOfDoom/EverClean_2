@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>EverClean</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>EverClean - Zapato impermeable para caballero.</h1>
+        <!-- Botón de cerrar sesión (visible solo si hay usuario logueado) -->
+        <button id="btn-logout" style="display: none;">Cerrar sesión</button>
+        <a href="login.html" id="btn-login">Iniciar sesión</a>
+        <a href="carrito.html" id="btn-cart">Carrito (<span id="cart-count">0</span>)</a>
+        <!-- Solo visible para Admin -->
+        <button id="btn-admin" style="display: none;" onclick="location.href='admin.html'">Panel Admin</button>
+    </header>
+
+    <div class="catalogo" id="catalogo">
+        <!-- Los productos se cargan dinámicamente con JS -->
+    </div>
+
+    <div class="carrusel">
+        <div class="carrusel-inner">
+            <div class="carrusel-item active">
+                <img src="img/c1.jpg" alt="Promoción 1">
+            </div>
+            <div class="carrusel-item">
+                <img src="img/c2.png" alt="Promoción 2">
+            </div>
+            <div class="carrusel-item">
+                <img src="img/c3.png" alt="Promoción 3">
+            </div>
+        </div>
+        <button class="carrusel-btn prev" onclick="moverCarrusel(-1)">&#10094;</button>
+        <button class="carrusel-btn next" onclick="moverCarrusel(1)">&#10095;</button>
+    </div>
+
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
