@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
     setupFormularioProducto();
 });
 
+// Agrega esto al final del evento DOMContentLoaded
+mostrarProductosEditables();
+
+
 function mostrarInventario() {
     const tabla = document.getElementById('tabla-inventario');
     tabla.innerHTML = '';
@@ -82,10 +86,8 @@ function setupFormularioProducto() {
     });
 }
 
-// Agrega esto al final del evento DOMContentLoaded
-mostrarProductosEditables();
 
-// Nueva función para mostrar productos editables
+// Asegúrate de que esta función esté después de la declaración de productos
 function mostrarProductosEditables() {
     const contenedor = document.getElementById('lista-productos');
     contenedor.innerHTML = '';
@@ -111,7 +113,6 @@ function mostrarProductosEditables() {
     });
 }
 
-// Función para editar producto (ejemplo básico)
 function editarProducto(id) {
     const producto = productos.find(p => p.id === id);
     if (producto) {
@@ -128,7 +129,6 @@ function editarProducto(id) {
     }
 }
 
-// Función para eliminar producto
 function eliminarProducto(id) {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
         productos = productos.filter(p => p.id !== id);
