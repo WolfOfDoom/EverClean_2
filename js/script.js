@@ -1,50 +1,110 @@
-// 1. Cargar productos desde localStorage o usar los predeterminados
+// Productos iniciales con inventario
 let productos = JSON.parse(localStorage.getItem("productos")) || [
-    { id: 1, nombre: "Zapatillas Running", precio: 50, imagen: "img/zapato1.jpg" },
-    { id: 2, nombre: "Botas de Cuero", precio: 80, imagen: "img/zapato2.jpg" }
+    {
+        id: 1,
+        nombre: "Zapatillas Running",
+        precio: 50,
+        imagen: "img/zapato1.jpg",
+        inventario: 10
+    },
+    {
+        id: 2,
+        nombre: "Botas de Cuero",
+        precio: 80,
+        imagen: "img/zapato2.jpg",
+        inventario: 10
+    }
 ];
 
-// 2. Guardar productos iniciales solo si no existen
+// Guardar productos iniciales solo si no existen
 if (!localStorage.getItem("productos")) {
     localStorage.setItem("productos", JSON.stringify(productos));
 }
 
-// 3. Mostrar botón de Admin si el rol es "admin"
+// Mostrar botón de Admin si el rol es "admin"
 document.addEventListener("DOMContentLoaded", function () {
     if (localStorage.getItem("userRole") === "admin") {
         document.getElementById("btn-admin").style.display = "inline-block";
     }
-    cargarCatalogo(); // Cargar catálogo después de que el DOM esté listo
+    cargarCatalogo();
+    actualizarContadorCarrito();
 });
 
-// 4. Función para cargar el catálogo
+// Función para cargar el catálogo con inventario
 function cargarCatalogo() {
     const catalogo = document.getElementById("catalogo");
-    catalogo.innerHTML = ""; // Limpiar antes de cargar
+    catalogo.innerHTML = "";
 
-    // Usar los productos actualizados de localStorage
     const productosActualizados = JSON.parse(localStorage.getItem("productos")) || productos;
 
     productosActualizados.forEach(producto => {
-        catalogo.innerHTML += `
-            <div class="producto">
-                <img src="${producto.imagen}" alt="${producto.nombre}">
-                <h3>${producto.nombre}</h3>
-                <p>$${producto.precio}</p>
-                <button onclick="agregarAlCarrito(${producto.id})">Añadir al carrito</button>
-            </div>
+        const productoElemento = document.createElement('div');
+        productoElemento.className = 'producto';
+        productoElemento.dataset.id = producto.id;
+        productoElemento.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}">
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio}</p>
+            <p class="inventario ${producto.inventario <= 0 ? 'agotado' : ''}">
+                ${producto.inventario <= 0 ? 'AGOTADO' : `Disponibles: ${producto.inventario}`}
+            </p>
+            <button onclick="agregarAlCarrito(${producto.id})" 
+                ${producto.inventario <= 0 ? 'disabled' : ''}>
+                ${producto.inventario <= 0 ? 'Agotado' : 'Añadir al carrito'}
+            </button>
         `;
+        catalogo.appendChild(productoElemento);
     });
 }
 
-// Resto del código (carrito) se mantiene igual...
-let carrito = [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+// Función para agregar al carrito con control de inventario
 function agregarAlCarrito(idProducto) {
     const producto = productos.find(p => p.id === idProducto);
-    carrito.push(producto);
-    actualizarCarrito();
+
+    if (!producto) return;
+
+    if (producto.inventario <= 0) {
+        alert('Este producto está agotado');
+        return;
+    }
+
+    // Disminuir inventario
+    producto.inventario--;
+    localStorage.setItem("productos", JSON.stringify(productos));
+
+    // Actualizar visualización
+    actualizarInventarioProducto(idProducto);
+
+    // Agregar al carrito
+    carrito.push({ ...producto });
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    actualizarContadorCarrito();
+
+    alert(`¡${producto.nombre} agregado al carrito!`);
 }
+
+function actualizarInventarioProducto(idProducto) {
+    const productoElemento = document.querySelector(`.producto[data-id="${idProducto}"]`);
+    if (productoElemento) {
+        const producto = productos.find(p => p.id === idProducto);
+        const inventarioElement = productoElemento.querySelector('.inventario');
+        const botonElement = productoElemento.querySelector('button');
+
+        inventarioElement.textContent = producto.inventario <= 0 ? 'AGOTADO' : `Disponibles: ${producto.inventario}`;
+        inventarioElement.className = `inventario ${producto.inventario <= 0 ? 'agotado' : ''}`;
+
+        botonElement.textContent = producto.inventario <= 0 ? 'Agotado' : 'Añadir al carrito';
+        botonElement.disabled = producto.inventario <= 0;
+    }
+}
+
+// Resto de funciones existentes (actualizarCarrito, mostrarCarrito, eliminarDelCarrito, etc.)
+// ... [mantén el resto de tus funciones como estaban]
+
+// Animación del título y funciones del carrusel
+// ... [mantén tus funciones de animación y carrusel]
 
 function actualizarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito)); // Guardar en localStorage
@@ -132,3 +192,71 @@ function moverCarrusel(direction) {
 
 // Cambio automático cada 5 segundos (opcional)
 setInterval(() => moverCarrusel(1), 5000);
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Seleccionamos el h2 que contiene el texto completo
+    const title = document.querySelector('h2');
+
+    // Extraemos el texto completo
+    const fullText = title.textContent;
+
+    // Limpiamos el contenido del h2
+    title.textContent = '';
+
+    // Dividimos el texto en palabras y luego en letras
+    const words = fullText.split(' ');
+
+    words.forEach((word, wordIndex) => {
+        // Creamos un span para cada palabra
+        const wordSpan = document.createElement('span');
+        wordSpan.style.display = 'inline-block';
+        wordSpan.style.marginRight = '8px'; // Espacio entre palabras
+
+        // Dividimos la palabra en letras
+        const letters = word.split('');
+
+        letters.forEach((letter, letterIndex) => {
+            // Creamos un span para cada letra
+            const letterSpan = document.createElement('span');
+            letterSpan.textContent = letter;
+            letterSpan.style.display = 'inline-block';
+            letterSpan.style.opacity = '0';
+            letterSpan.style.transform = 'translateY(20px)';
+            letterSpan.style.transition = `opacity 0.5s ease ${(wordIndex * 0.2) + (letterIndex * 0.1)}s, transform 0.5s ease ${(wordIndex * 0.2) + (letterIndex * 0.1)}s`;
+
+            wordSpan.appendChild(letterSpan);
+
+            // Aplicamos la animación después de un pequeño retraso
+            setTimeout(() => {
+                letterSpan.style.opacity = '1';
+                letterSpan.style.transform = 'translateY(0)';
+            }, 100);
+        });
+
+        title.appendChild(wordSpan);
+    });
+});
+
+// dark-mode.js
+document.addEventListener('DOMContentLoaded', function () {
+    const darkModeSwitch = document.getElementById('dark-mode-switch');
+
+    // Cargar preferencia guardada
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeSwitch.checked = true;
+    }
+
+    // Escuchar cambios en el switch
+    darkModeSwitch.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    });
+});
+
+

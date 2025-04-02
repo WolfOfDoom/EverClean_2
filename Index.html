@@ -9,13 +9,30 @@
 
 <body>
     <header>
-        <h1>EverClean - Zapato impermeable para caballero.</h1>
-        <!-- Botón de cerrar sesión (visible solo si hay usuario logueado) -->
-        <button id="btn-logout" style="display: none;">Cerrar sesión</button>
-        <a href="login.html" id="btn-login">Iniciar sesión</a>
-        <a href="carrito.html" id="btn-cart">Carrito (<span id="cart-count">0</span>)</a>
-        <!-- Solo visible para Admin -->
-        <button id="btn-admin" style="display: none;" onclick="location.href='admin.html'">Panel Admin</button>
+        <div class="header-content">
+            <div class="titles">
+                <h1>EverClean</h1>
+                <h2>Zapato impermeable para caballero.</h2>
+            </div>
+
+            <!-- Añade este div para el switch 
+            <div class="dark-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-switch">
+                    <span class="slider"></span>
+                </label>
+                <span>Modo Oscuro</span>
+            </div>
+            <br>-->
+            <div class="buttons">
+
+                <button id="btn-logout" style="display: none;">Cerrar sesión</button>
+                <a href="login.html" id="btn-login">Iniciar sesión</a>
+                <a href="carrito.html" id="btn-cart">Carrito (<span id="cart-count">0</span>)</a>
+                <button id="btn-admin" style="display: none;" onclick="location.href='admin.html'">Panel Admin</button>
+
+            </div>
+
     </header>
 
     <div class="catalogo" id="catalogo">

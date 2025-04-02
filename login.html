@@ -1,15 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>EverClean</title>
+    <title>EverClean - Login</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/auth.css">
 </head>
-<h1>EverClean - Zapato impermeable para caballero.</h1>
-<h2>Inicia Sesión</h2><br><br>
-<form id="login-form">
-    <input type="email" id="email" placeholder="Correo" required>
-    <input type="password" id="password" placeholder="Contraseña" required>
-    <button type="submit">Iniciar sesión</button>
-</form>
 
-<button onclick="window.location.href='index.html'">Cancelar</button>
-<script src="js/auth.js"></script>
+<body>
+    <div class="auth-container">
+        <h1>EverClean</h1>
+        <h2>Zapato impermeable para caballero</h2>
+        <h2>Inicia Sesión</h2>
+        <form id="login-form" class="auth-form">
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <div class="auth-actions">
+                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                <button type="button" class="btn btn-secondary"
+                    onclick="window.location.href='index.html'">Cancelar</button>
+            </div>
+        </form>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

@@ -1,15 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>EverClean</title>
+    <title>EverClean - Carrito</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/carrito.css">
+    <style>
+        .ticket {
+            font-family: monospace;
+            white-space: pre;
+            background: #f8f8f8;
+            padding: 20px;
+            border: 1px dashed #ccc;
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .thank-you {
+            text-align: center;
+            font-size: 24px;
+            color: #27ae60;
+            margin: 20px 0;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Tu Carrito</h2>
-    <div id="items-carrito"></div>
-    <p>Total: $<span id="total">0</span></p>
-    <script src="js/script.js"></script>
-    <script src="js/carrito.js"></script>
+    <div class="carrito-container">
+        <h2>Tu Carrito</h2>
+        <div id="items-carrito" class="items-container"></div>
+        <div class="total-container">
+            <p class="total-text">Total: $<span id="total">0</span></p>
+            <button class="btn-comprar" onclick="finalizarCompra()">Comprar</button>
+            <button class="btn-volver" onclick="window.location.href='index.html'">Volver</button>
+        </div>
 
-    <button onclick="window.location.href='index.html'">Volver</button>
+        <div id="thank-you" class="thank-you">
+            ¡Gracias por tu compra en EverClean!
+        </div>
+
+        <div id="ticket" class="ticket" style="display: none;"></div>
+    </div>
+
+    <script src="js/carrito.js"></script>
+    <script>
+        function finalizarCompra() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+
+            // Generar folio aleatorio
+            const folio = 'EV-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            const fecha = new Date().toLocaleString();
+            let total = 0;
+
+            // Generar ticket ASCII
+            let ticket = `
+╔══════════════════════════════╗
+║        EVERCLEAN SHOP        ║
+╟──────────────────────────────╢
+║ FOLIO: ${folio.padEnd(22)}║
+║ FECHA: ${fecha.padEnd(22)}║
+╟──────────────┬───────────────╢
+║ PRODUCTO     │ TOTAL         ║
+╟──────────────┼───────────────╢`;
+
+            carrito.forEach(item => {
+                ticket += `
+║ ${item.nombre.substring(0, 12).padEnd(12)} │ $${item.precio.toString().padStart(8)}     ║`;
+                total += item.precio;
+            });
+
+            ticket += `
+╟──────────────┼───────────────╢
+║ TOTAL        │ $${total.toString().padStart(8)}     ║
+╚══════════════╧═══════════════╝
+            `;
+
+            // Mostrar elementos
+            document.getElementById('ticket').textContent = ticket;
+            document.getElementById('ticket').style.display = 'block';
+            document.getElementById('thank-you').style.display = 'block';
+
+            // Vaciar carrito
+            localStorage.removeItem('carrito');
+            actualizarContadorCarrito();
+
+            // Actualizar la vista del carrito
+            mostrarCarrito();
+        }
+
+        // Función para actualizar el contador en el header
+        function actualizarContadorCarrito() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            document.getElementById('cart-count').textContent = carrito.length;
+        }
+    </script>
 </body>
+
+</html>

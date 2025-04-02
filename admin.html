@@ -1,26 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>EverClean</title>
+    <title>EverClean - Admin</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 
 <body>
-    <h2>Panel de Administración</h2>
-    <div>
-        <h3>Añadir nuevo producto</h3>
-        <form id="form-add-product">
-            <input type="text" id="product-name" placeholder="Nombre" required>
-            <input type="number" id="product-price" placeholder="Precio" required>
-            <input type="text" id="product-image" placeholder="URL de la imagen">
-            <button type="submit">Agregar</button>
-        </form>
+    <div class="admin-container">
+        <h2>Panel de Administración</h2>
+
+        <div>
+            <h3>Añadir nuevo producto</h3>
+            <form id="form-add-product" class="admin-form">
+                <input type="text" id="product-name" placeholder="Nombre del producto" required>
+                <input type="number" id="product-price" placeholder="Precio" required>
+                <input type="text" id="product-image" placeholder="URL de la imagen">
+                <div class="admin-actions">
+                    <button type="submit" class="btn btn-primary">Agregar producto</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="product-list">
+            <h3>Catálogo actual</h3>
+            <div id="lista-productos" class="productos-editable"></div>
+        </div>
+
+        <div class="admin-inventario">
+            <h3>Gestionar Inventario</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Inventario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-inventario">
+                    <!-- Se llenará dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-actions">
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">Volver al inicio</button>
+        </div>
     </div>
 
-    <div>
-        <h3>Catálogo actual</h3>
-        <div id="lista-productos"></div>
-    </div>
-
-    <button onclick="window.location.href='index.html'">Volver</button>
     <script src="js/admin.js"></script>
 </body>
+
+</html>
