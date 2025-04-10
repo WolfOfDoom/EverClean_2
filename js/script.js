@@ -50,7 +50,7 @@ function cargarCatalogo() {
             </p>
             <button onclick="agregarAlCarrito(${producto.id})" 
                 ${producto.inventario <= 0 ? 'disabled' : ''}>
-                ${producto.inventario <= 0 ? 'Agotado' : 'Añadir al carrito'}
+                ${producto.inventario <= 0 ? 'Agotado' : 'Agregar al carrito'}
             </button>
         `;
         catalogo.appendChild(productoElemento);
@@ -95,16 +95,10 @@ function actualizarInventarioProducto(idProducto) {
         inventarioElement.textContent = producto.inventario <= 0 ? 'AGOTADO' : `Disponibles: ${producto.inventario}`;
         inventarioElement.className = `inventario ${producto.inventario <= 0 ? 'agotado' : ''}`;
 
-        botonElement.textContent = producto.inventario <= 0 ? 'Agotado' : 'Añadir al carrito';
+        botonElement.textContent = producto.inventario <= 0 ? 'Agotado' : 'Agregar al carrito';
         botonElement.disabled = producto.inventario <= 0;
     }
 }
-
-// Resto de funciones existentes (actualizarCarrito, mostrarCarrito, eliminarDelCarrito, etc.)
-// ... [mantén el resto de tus funciones como estaban]
-
-// Animación del título y funciones del carrusel
-// ... [mantén tus funciones de animación y carrusel]
 
 function actualizarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito)); // Guardar en localStorage

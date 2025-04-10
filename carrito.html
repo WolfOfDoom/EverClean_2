@@ -25,6 +25,50 @@
             margin: 20px 0;
             display: none;
         }
+
+        /* Nuevos estilos para proveedores */
+        .opciones-proveedor {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .opcion-proveedor {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .opcion-proveedor:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .opcion-proveedor input[type="radio"] {
+            display: none;
+        }
+
+        .opcion-proveedor input[type="radio"]:checked+label {
+            background-color: #f0f8ff;
+        }
+
+        .opcion-proveedor label {
+            display: block;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .precio-proveedor {
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
@@ -32,10 +76,55 @@
     <div class="carrito-container">
         <h2>Tu Carrito</h2>
         <div id="items-carrito" class="items-container"></div>
+
+        <!-- Sección de proveedores (oculta inicialmente) -->
+        <div id="proveedores-container" style="margin: 20px 0; display: none;">
+            <h3>Selecciona un proveedor:</h3>
+            <div class="opciones-proveedor">
+                <div class="opcion-proveedor">
+                    <input type="radio" name="proveedor" id="proveedor1" value="proveedor1" checked>
+                    <label for="proveedor1">
+                        <h4>Proveedor Express</h4>
+                        <p>Entrega en 24 horas</p>
+                        <p class="precio-proveedor">+ $150.00</p>
+                    </label>
+                </div>
+                <div class="opcion-proveedor">
+                    <input type="radio" name="proveedor" id="proveedor2" value="proveedor2">
+                    <label for="proveedor2">
+                        <h4>Proveedor Estándar</h4>
+                        <p>Entrega en 3-5 días</p>
+                        <p class="precio-proveedor">+ $80.00</p>
+                    </label>
+                </div>
+                <div class="opcion-proveedor">
+                    <input type="radio" name="proveedor" id="proveedor3" value="proveedor3">
+                    <label for="proveedor3">
+                        <h4>Proveedor Económico</h4>
+                        <p>Entrega en 7-10 días</p>
+                        <p class="precio-proveedor">+ $50.00</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- En la sección del total-container, modifícalo así: -->
         <div class="total-container">
-            <p class="total-text">Total: $<span id="total">0</span></p>
-            <button class="btn-comprar" onclick="finalizarCompra()">Comprar</button>
-            <button class="btn-volver" onclick="window.location.href='index.html'">Volver</button>
+            <div class="total-section">
+                <p class="total-text">Subtotal: $<span id="total">0</span></p>
+            </div>
+
+            <div class="metodos-pago">
+                <img src="https://img3.wikia.nocookie.net/__cb20121110085059/logopedia/images/6/61/PayPal_logo_new.png"
+                    alt="PayPal" class="logo-pago">
+                <img src="https://intranet.gruporuba.com.mx/PagosLineaBBVA/FrontEnd/img/Visa-MasterCard-1024x393.png"
+                    alt="Visa Mastercard" class="logo-pago">
+            </div>
+
+            <div class="botones-compra">
+                <button class="btn-comprar">Comprar</button>
+                <button class="btn-volver" onclick="window.location.href='index.html'">Volver</button>
+            </div>
         </div>
 
         <div id="thank-you" class="thank-you">
@@ -45,9 +134,43 @@
         <div id="ticket" class="ticket" style="display: none;"></div>
     </div>
 
+    <script src="js/script.js"></script>
     <script src="js/carrito.js"></script>
     <script>
-        function finalizarCompra() {
+        // Función para mostrar opciones de proveedores
+        function mostrarOpcionesProveedores() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+
+            document.getElementById('proveedores-container').style.display = 'block';
+            document.querySelector('.btn-comprar').textContent = 'Confirmar compra';
+            document.querySelector('.btn-comprar').onclick = finalizarCompraConProveedor;
+        }
+
+        // Función para finalizar compra con proveedor seleccionado
+        function finalizarCompraConProveedor() {
+            const proveedorSeleccionado = document.querySelector('input[name="proveedor"]:checked').value;
+            let costoEnvio = 0;
+            let nombreProveedor = "";
+
+            switch (proveedorSeleccionado) {
+                case 'proveedor1':
+                    costoEnvio = 150.00;
+                    nombreProveedor = "Proveedor Exp";
+                    break;
+                case 'proveedor2':
+                    costoEnvio = 80.00;
+                    nombreProveedor = "Proveedor Est";
+                    break;
+                case 'proveedor3':
+                    costoEnvio = 50.00;
+                    nombreProveedor = "Proveedor Eco";
+                    break;
+            }
+
             const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             if (carrito.length === 0) {
                 alert('Tu carrito está vacío');
@@ -57,15 +180,16 @@
             // Generar folio aleatorio
             const folio = 'EV-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
             const fecha = new Date().toLocaleString();
-            let total = 0;
+            let subtotal = 0;
 
-            // Generar ticket ASCII
+            // Generar ticket ASCII con el proveedor
             let ticket = `
 ╔══════════════════════════════╗
-║        EVERCLEAN SHOP        ║
+║      EVERCLEAN by ROHA       ║
 ╟──────────────────────────────╢
 ║ FOLIO: ${folio.padEnd(22)}║
 ║ FECHA: ${fecha.padEnd(22)}║
+║ PROVEEDOR: ${nombreProveedor.substring(0, 15).padEnd(15)}   ║
 ╟──────────────┬───────────────╢
 ║ PRODUCTO     │ TOTAL         ║
 ╟──────────────┼───────────────╢`;
@@ -73,12 +197,17 @@
             carrito.forEach(item => {
                 ticket += `
 ║ ${item.nombre.substring(0, 12).padEnd(12)} │ $${item.precio.toString().padStart(8)}     ║`;
-                total += item.precio;
+                subtotal += item.precio;
             });
+
+            const total = subtotal + costoEnvio;
 
             ticket += `
 ╟──────────────┼───────────────╢
-║ TOTAL        │ $${total.toString().padStart(8)}     ║
+║ SUBTOTAL     │ $${subtotal.toString().padStart(8)}     ║
+║ ENVÍO        │ $${costoEnvio.toFixed(2).padStart(8)}     ║
+╟──────────────┼───────────────╢
+║ TOTAL        │ $${total.toFixed(2).padStart(8)}     ║
 ╚══════════════╧═══════════════╝
             `;
 
@@ -86,6 +215,7 @@
             document.getElementById('ticket').textContent = ticket;
             document.getElementById('ticket').style.display = 'block';
             document.getElementById('thank-you').style.display = 'block';
+            document.getElementById('proveedores-container').style.display = 'none';
 
             // Vaciar carrito
             localStorage.removeItem('carrito');
@@ -93,6 +223,10 @@
 
             // Actualizar la vista del carrito
             mostrarCarrito();
+
+            // Restaurar botón de compra
+            document.querySelector('.btn-comprar').textContent = 'Comprar';
+            document.querySelector('.btn-comprar').onclick = mostrarOpcionesProveedores;
         }
 
         // Función para actualizar el contador en el header
@@ -100,6 +234,14 @@
             const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             document.getElementById('cart-count').textContent = carrito.length;
         }
+
+        // Asignar evento inicial al botón Comprar
+        document.querySelector('.btn-comprar').onclick = mostrarOpcionesProveedores;
+
+        // Mostrar carrito al cargar la página
+        document.addEventListener('DOMContentLoaded', function () {
+            mostrarCarrito();
+        });
     </script>
 </body>
 

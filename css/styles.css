@@ -1,53 +1,107 @@
 body {
     font-family: Arial, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: rgb(255, 195, 0);
 }
 
-/* Contenedor principal del catálogo */
+/* Contenedor principal del catálogo - Cambiado a vertical */
 .catalogo {
     display: flex;
-    /* Activa Flexbox */
-    flex-wrap: wrap;
-    /* Permite que los items pasen a la siguiente línea si no caben */
-    gap: 20px;
-    /* Espacio entre productos */
-    justify-content: center;
+    flex-direction: column;
+    /* Cambia la dirección a vertical */
+    align-items: center;
     /* Centra los productos horizontalmente */
+    gap: 30px;
+    /* Aumenta el espacio entre productos */
+    padding: 20px;
+    max-width: 800px;
+    /* Ancho máximo para mejor legibilidad */
+    margin: 0 auto;
+    /* Centra el catálogo en la página */
 }
 
-/* Estilo para el contenedor del producto */
+/* Estilo para el contenedor del producto - Aumentado tamaño */
 .producto {
     border: 1px solid #ddd;
-    padding: 10px;
-    margin: 10px;
-    width: 200px;
-    /* Ancho fijo para el cuadro */
-    height: 300px;
-    /* Altura fija (opcional) */
+    padding: 20px;
+    width: 80%;
+    /* Ocupa el 80% del ancho disponible */
+    max-width: 500px;
+    /* Máximo ancho del producto */
+    height: auto;
+    /* Altura automática */
     overflow: hidden;
-    /* Oculta lo que se salga */
     text-align: center;
-    /* Centra el contenido */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
 }
 
-/* Estilo para la imagen dentro del producto */
+/* Imágenes más grandes */
 .producto img {
     width: 100%;
-    /* Ocupa el 100% del ancho del contenedor */
-    height: auto;
-    /* Mantiene la proporción */
-    max-height: 150px;
-    /* Altura máxima (ajusta según necesites) */
+    height: 350px;
+    /* Altura fija más grande */
     object-fit: cover;
-    /* Recorta la imagen si es necesario */
+    /* Mantiene proporciones sin deformar */
+    border-radius: 5px;
+    margin-bottom: 15px;
 }
 
-button {
-    background: #007BFF;
-    color: white;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
+/* Ajustes para los textos */
+.producto h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+.producto p {
+    font-size: 1.2rem;
+    margin: 8px 0;
+    color: #555;
+}
+
+/* Botón más grande */
+.producto button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Estado de inventario más destacado */
+.inventario {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* Header ajustado */
+header {
+    padding: 15px 0;
+    margin-bottom: 20px;
+}
+
+.titles h1 {
+    font-size: 2.8rem;
+    margin-bottom: 5px;
+}
+
+.titles h2 {
+    font-size: 1.4rem;
+}
+
+/* Botones del header */
+.buttons {
+    margin-top: 15px;
+}
+
+#btn-login,
+#btn-cart,
+#btn-logout,
+#btn-admin {
+    padding: 10px 20px;
+    font-size: 1rem;
 }
 
 /* Estilos para el panel de admin */
@@ -219,18 +273,6 @@ header {
 
 .inventario-bajo {
     color: #e74c3c !important;
-}
-
-/* Estilos para el inventario */
-.producto {
-    position: relative;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin: 10px;
-    width: 200px;
-    text-align: center;
-    border-radius: 8px;
-    transition: transform 0.3s;
 }
 
 .producto:hover {
