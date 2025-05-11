@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
-    background-color: rgb(255, 195, 0);
+    background-color: #ff0000;
 }
 
 /* Contenedor principal del catálogo - Cambiado a vertical */
